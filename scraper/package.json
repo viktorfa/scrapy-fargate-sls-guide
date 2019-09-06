@@ -1,0 +1,10 @@
+{
+  "name": "my-sls-scrapy",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-cloudformation-sub-variables": "^0.2.1",
+    "serverless-python-requirements": "^5.0.0"
+  }
+}

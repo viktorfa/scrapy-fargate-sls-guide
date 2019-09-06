@@ -4,7 +4,7 @@ import json
 from my_sls_scraper.crawl import crawl
 
 
-def scrape(event):
+def scrape(event={}, context={}):
     crawl(**event)
 
 

@@ -26,7 +26,9 @@ def crawl(settings={}, spider_name="header_spider"):
     feed_format = "json"
 
     if is_in_aws():
+        # Lambda can only write to the /tmp folder.
         settings['HTTPCACHE_DIR'] = "/tmp"
+        feed_uri = f"s3://{os.getenv('FEED_BUCKET_NAME')}/%(name)s.json"
     else:
         feed_uri = "file://{}/%(name)s-%(time)s.json".format(
             os.path.join(os.getcwd(), "feed")
