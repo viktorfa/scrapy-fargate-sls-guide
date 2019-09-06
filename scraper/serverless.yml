@@ -3,7 +3,6 @@ service: my-sls-scrapy
 provider:
   name: aws
   runtime: python3.7
-  profile: serverless-mpn-admin
   logRetentionInDays: 1
 
   environment:
@@ -52,12 +51,25 @@ provider:
         - !GetAtt FargateTaskRole.Arn
 
 functions:
-  hello:
-    handler: handler.hello
   lambdaScrape:
     handler: launcher.scrape
   fargateScrape:
     handler: launch_fargate.launch_fargate
+    events:
+      - schedule:
+          rate: cron(0 6 ? * MON *)
+          enabled: true
+          description: Header spider every Monday morning at 6 AM UTC
+          # The input is key-value pairs accessed in the root of the event parameter of every handler function, i.e. event.get("spider_name")
+          input:
+            spider_name: header_spider
+  pollSpidersScrape:
+    handler: handler.run_crawlers
+    events:
+      - schedule:
+          rate: rate(2 hours)
+          enabled: true
+          description: Poll spiders every 2 hours
 
 # We include files by whitelisting to reduce the deployment time.
 # Just remember to add any files you create!
