@@ -34,6 +34,21 @@ Resources:
                 Resource: !Sub
                   - "arn:aws:s3:::#{BucketName}/*"
                   - BucketName: !Ref ScraperFeedBucket
+        - PolicyName: HttpCacheBucketPolicy
+          PolicyDocument:
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "s3:GetObject"
+                  - "s3:PutObject"
+                  - "s3:ListBucket"
+                Resource:
+                  - !Sub
+                    - "arn:aws:s3:::#{BucketName}/*"
+                    - BucketName: !Ref HttpCacheBucket
+                  - !Sub
+                    - "arn:aws:s3:::#{BucketName}"
+                    - BucketName: !Ref HttpCacheBucket
 
   FargateExecutionRole:
     Type: AWS::IAM::Role

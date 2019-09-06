@@ -8,6 +8,12 @@ provider:
 
   environment:
     FEED_BUCKET_NAME: !Ref ScraperFeedBucket
+    HTTP_CACHE_BUCKET_NAME: !Ref HttpCacheBucket
+    ECS_CLUSTER: !GetAtt FargateECSCluster.Arn
+    ECS_TASK_ARN: !Ref FargateECSTaskDefinition
+    ECS_SUBNET: !Ref FargateSubnet
+    ECS_SEC_GROUP: !Ref FargateSG
+    CONTAINER_NAME: "scraper_container"
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -16,12 +22,34 @@ provider:
       Resource: !Sub
         - "arn:aws:s3:::#{BucketName}/*"
         - BucketName: !Ref ScraperFeedBucket
+    - Effect: "Allow"
+      Action:
+        - "s3:GetObject"
+        - "s3:PutObject"
+        - "s3:ListBucket"
+      Resource:
+        - !Sub
+          - "arn:aws:s3:::#{BucketName}/*"
+          - BucketName: !Ref HttpCacheBucket
+        - !Sub
+          - "arn:aws:s3:::#{BucketName}"
+          - BucketName: !Ref HttpCacheBucket
 
     - Effect: Allow
       Action:
         - ecs:RunTask
       Resource:
         - !Ref FargateECSTaskDefinition
+    - Effect: Allow
+      Action:
+        - iam:PassRole
+      Resource:
+        - !GetAtt FargateExecutionRole.Arn
+    - Effect: Allow
+      Action:
+        - iam:PassRole
+      Resource:
+        - !GetAtt FargateTaskRole.Arn
 
 functions:
   hello:

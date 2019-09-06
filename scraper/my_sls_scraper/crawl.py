@@ -33,6 +33,9 @@ def crawl(settings={}, spider_name="header_spider"):
         feed_uri = "file://{}/%(name)s-%(time)s.json".format(
             os.path.join(os.getcwd(), "feed")
         )
+    if (is_in_aws() and os.getenv("USE_S3_CACHE") != "0") or os.getenv("USE_S3_CACHE"):
+        settings["HTTPCACHE_STORAGE"] = "my_sls_scraper.extensions.s3cache.S3CacheStorage"
+        settings["S3CACHE_URI"] = f"s3://{os.environ['HTTP_CACHE_BUCKET_NAME']}/cache"
 
     settings['FEED_URI'] = feed_uri
     settings['FEED_FORMAT'] = feed_format
