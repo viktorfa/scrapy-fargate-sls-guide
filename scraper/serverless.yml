@@ -17,11 +17,19 @@ provider:
         - "arn:aws:s3:::#{BucketName}/*"
         - BucketName: !Ref ScraperFeedBucket
 
+    - Effect: Allow
+      Action:
+        - ecs:RunTask
+      Resource:
+        - !Ref FargateECSTaskDefinition
+
 functions:
   hello:
     handler: handler.hello
   lambdaScrape:
     handler: launcher.scrape
+  fargateScrape:
+    handler: launch_fargate.launch_fargate
 
 # We include files by whitelisting to reduce the deployment time.
 # Just remember to add any files you create!
@@ -29,13 +37,15 @@ package:
   include:
     - handler.py
     - launcher.py
+    - launch_fargate.py
     - my_sls_scraper/**
     - scrapy.cfg
   exclude:
     - "./**"
 
 resources:
-  - ${file(./cf-template.yml)}
+  - ${file(./s3-template.yml)}
+  - ${file(./fargate-template.yml)}
 
 plugins:
   - serverless-python-requirements
