@@ -1,4 +1,4 @@
-STACKNAME_BASE="my-sls-scrapy-dev"
+STACKNAME_BASE="my-sls-scraper-dev"
 # This is a region that supports AWS Fargate
 REGION="us-east-1"
 PROFILE="serverless-mpn-admin"
