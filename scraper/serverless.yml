@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: python3.7
   logRetentionInDays: 1
-  profile: serverless-mpn-admin
+  profile: my-sls-admin
 
   environment:
     FEED_BUCKET_NAME: !Ref ScraperFeedBucket
