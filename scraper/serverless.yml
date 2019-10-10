@@ -9,11 +9,11 @@ provider:
   environment:
     FEED_BUCKET_NAME: !Ref ScraperFeedBucket
     HTTP_CACHE_BUCKET_NAME: !Ref HttpCacheBucket
+    CONTAINER_NAME: "scraper_container"
     ECS_CLUSTER: !GetAtt FargateECSCluster.Arn
     ECS_TASK_ARN: !Ref FargateECSTaskDefinition
     ECS_SUBNET: !Ref FargateSubnet
     ECS_SEC_GROUP: !Ref FargateSG
-    CONTAINER_NAME: "scraper_container"
 
   iamRoleStatements:
     - Effect: "Allow"
